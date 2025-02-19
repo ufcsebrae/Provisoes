@@ -1,7 +1,7 @@
 # db_config.py
 from sqlalchemy import engine_from_config
 
-# Definir as variáveis
+# Definir as variáveis da conexão
 servername = "spsvsql39\\metas"
 dbname = "HubDados"
 driver = "ODBC+Driver+17+for+SQL+Server"
@@ -9,7 +9,7 @@ driver = "ODBC+Driver+17+for+SQL+Server"
 # Configuração do banco de dados em um dicionário
 config = {
     'sqlalchemy.url': 
-    f'mssql+pymssql://@{servername}/{dbname}?trusted_connection=yes&driver={driver}'
+    f'mssql+pyodbc://@{servername}/{dbname}?trusted_connection=yes&driver={driver}'
 }
 
 def create_engine():
