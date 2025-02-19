@@ -1,5 +1,5 @@
 from db_config import create_engine,close_connection
-from query_2 import queries
+from query import queries
 from sqlalchemy import text
 import pandas as pd
 
