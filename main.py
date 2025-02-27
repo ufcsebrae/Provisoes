@@ -1,10 +1,10 @@
-from db_config import create_engine,close_connection,insert_df_new_engine
+from db_config import create_engine_,close_connection,insert_df_new_engine
 import os
 from time import gmtime, strftime
 from query import queries
 from sqlalchemy import text
 import pandas as pd
-from excel_gerador import ExcelGerador
+from excel_generator import ExcelGenerator
 import time  # 👈 import para o timer
 import cProfile  # 👈 Import para profiling
 from email_sender import enviar_relatorio_email  # 👈 Novo import
@@ -14,9 +14,9 @@ start_time = time.time()
 data = strftime('%d-%m-%Y', gmtime())
 def main():
     #estabelecendo conexão
-    engine = create_engine()
+    engine = create_engine_()
     #inicia relatório
-    relatorio = ExcelGerador(os.path.join(os.getcwd(), "provisao_" + data + ".xlsx"))
+    relatorio = ExcelGenerator(os.path.join(os.getcwd(), "provisao_" + data + ".xlsx"))
     dataframes_email = {}  # 👈 Dicionário para armazenar DataFrames para o email
 
     try:

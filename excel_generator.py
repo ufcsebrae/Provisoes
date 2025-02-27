@@ -1,6 +1,6 @@
 import pandas as pd
 
-class ExcelGerador:
+class ExcelGenerator:
     def __init__(self, file_name):
         self.file_name = file_name
         self.sheets_added = False

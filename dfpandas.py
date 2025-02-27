@@ -58,7 +58,7 @@ def _pandas(dataframes):
                 'Valor Pendente': formatar_moeda,
             })
 
-            tabelas_html[nome_aba] = styled_df.to_html(classes="table", border=0, index=False)
+            tabelas_html[nome_aba] = styled_df.hide(axis="index").to_html(classes="table", border=0, index=False)
             print(f"✅ Tabela gerada para aba '{nome_aba}'.")
 
     return tabelas_html

@@ -30,7 +30,7 @@ def enviar_relatorio_email(dataframes_email, caminho_excel):
     MAIOR_VALOR = f"R$ {maior_registro.get('MOVIMENTOS_PENDENTES', 0):,.0f}".replace(",", ".")
 
     # Configurações do e-mail
-    DESTINATARIOS = ["contabilidade@sp.sebrae.com.br","orcamento@sp.sebrae.com.br","marcelocp@sebraesp.com.br","katiah@sebraesp.com.br","daniellap@sebraesp.com.br"]
+    DESTINATARIOS = ["contabilidade@sp.sebrae.com.br","orcamento@sp.sebrae.com.br"]
     ASSUNTO = f"Controle Provisão Serviços - {data_hoje}"
     TEXTO_CORPO = f"""<p>Prezados,</p>
         <p>Segue relatório da provisão de serviços do dia <strong>{data_hoje}</strong></p>
