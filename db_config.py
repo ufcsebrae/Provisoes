@@ -28,7 +28,7 @@ def close_connection(engine):
 
 
 def insert_df_new_engine(df: pd.DataFrame, nome_arquivo: str, nome_tabela: str = "Provisao"):
-    # ... (mantenha as conversões de dados anteriores)
+    df['data_atualizacao'] = pd.to_datetime('today').date()
 
     # String de conexão ajustada
     connection_string = (
