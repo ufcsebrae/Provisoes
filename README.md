@@ -1,6 +1,9 @@
 # Provisões
 
+Automatize a geração de relatórios de provisão de serviços com Python, exporte em Excel e envie tudo por e-mail com facilidade.
+
 Este projeto é uma aplicação Python para gerar relatórios de provisão de serviços, salvar os resultados em um arquivo Excel e enviar esses relatórios por e-mail.
+
 
 ## Estrutura do Projeto
 __pycache__/
