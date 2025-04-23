@@ -17,9 +17,6 @@ email_template.html
 enviaremail.py
 excel_gerador.py
 main.py
-provisao_24-02-2025.xlsx
-provisao_25-02-2025.xlsx
-provisao_26-02-2025.xlsx
 query.py
 requirements.txt
 
