@@ -52,7 +52,7 @@ def insert_df_new_engine(df: pd.DataFrame, nome_arquivo: str, nome_tabela: str =
             nome_tabela,
             con=conn,
             schema="dbo",
-            if_exists='replace',
+            if_exists='append',
             index=False,
             chunksize=75  # 75 linhas × 28 colunas = 2100 parâmetros
         )
