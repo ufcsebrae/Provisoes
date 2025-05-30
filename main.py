@@ -3,6 +3,7 @@ import os
 from time import gmtime, strftime
 from query import queries
 from sqlalchemy import text
+from datetime import datetime
 import pandas as pd
 from excel_generator import ExcelGenerator
 import time  # 👈 import para o timer
@@ -21,6 +22,21 @@ def main():
 
     try:
         with engine.connect() as connection:
+            hoje = datetime.now().strftime('%Y-%m-%d')
+            print(f"Data de hoje: {hoje}")
+
+            # Consulta para obter a data máxima de atualização
+            query_max_data = "SELECT MAX(data_atualizacao) FROM financa.dbo.Provisao"
+            max_data = pd.read_sql_query(sql=text(query_max_data), con=connection).iloc[0, 0]
+
+            # Verifica se a data máxima é igual à data de hoje
+            if str(max_data) == hoje:
+                print("Encontrado dados de hoje, deletando...")
+                    # Query para deletar registros com a data de hoje     
+                connection.execute(
+                        text("DELETE FROM financa.dbo.orcado WHERE data_atualizacao = :hoje"),
+                        {"hoje": hoje}
+                )
             # 🔍 Carrega os resultados diretamente em um DataFrame
             df = pd.read_sql_query(sql=text(queries["query_total"]),con=connection)
             insert_df_new_engine(df,"provisao_","Provisao")            
