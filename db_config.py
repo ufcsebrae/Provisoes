@@ -1,11 +1,12 @@
 # db_config.py
 from sqlalchemy import create_engine, event,engine_from_config
 from sqlalchemy.engine import Engine
+from sqlalchemy.exc import SQLAlchemyError
 import pandas as pd
 
 
 # Definir as variáveis da conexão
-servername = "spsvsql39\\metas"
+servername = "spsvsql39"
 dbname = "HubDados"
 driver = "ODBC+Driver+17+for+SQL+Server"
 
@@ -30,31 +31,40 @@ def close_connection(engine):
 def insert_df_new_engine(df: pd.DataFrame, nome_arquivo: str, nome_tabela: str = "Provisao"):
     df['data_atualizacao'] = pd.to_datetime('today').date()
 
-    # String de conexão ajustada
     connection_string = (
-        "mssql+pyodbc://@spsvsql39\\metas/FINANCA?"
+        "mssql+pyodbc://@spsvsql39/FINANCA?"
         "trusted_connection=yes&"
-        "driver=ODBC+Driver+17+for+SQL+Server"
+        "driver=ODBC+Driver+17+for+SQL+Server&"
+        "timeout=30"
     )
 
-    # Configurar engine e habilitar fast_executemany via evento
-    engine = create_engine(connection_string)
+    try:
+        print("🔗 Criando engine...")
+        engine = create_engine(connection_string)
 
-    # Evento para configurar o cursor do pyodbc
-    @event.listens_for(engine, "connect")
-    def configure_fast_executemany(conn, _):
-        cursor = conn.cursor()
-        cursor.fast_executemany = True  # 🚀 Ativação direta no cursor
+        # Aplicar fast_executemany corretamente
+        @event.listens_for(engine, "before_cursor_execute")
+        def receive_before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+            if executemany:
+                cursor.fast_executemany = True
 
-    # Inserção dos dados
-    with engine.begin() as conn:
-        df.to_sql(
-            nome_tabela,
-            con=conn,
-            schema="dbo",
-            if_exists='append',
-            index=False,
-            chunksize=75  # 75 linhas × 28 colunas = 2100 parâmetros
-        )
+        with engine.begin() as conn:
+            print("📤 Inserindo dados no banco...")
+            df.to_sql(
+                nome_tabela,
+                con=conn,
+                schema="dbo",
+                if_exists='append',
+                index=False,
+                chunksize=50  # Reduzido para maior estabilidade
+            )
 
-    print(f"✅ DataFrame salvo na tabela '{nome_tabela}'.")
+        print(f"✅ DataFrame salvo na tabela '{nome_tabela}' com sucesso!")
+
+    except SQLAlchemyError as e:
+        print("❌ Erro durante a inserção no banco:")
+        print(e)
+
+    finally:
+        engine.dispose()
+        print("🔌 Conexão encerrada.")
