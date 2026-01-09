@@ -8,7 +8,6 @@ import pandas as pd
 from excel_generator import ExcelGenerator
 import time  # 👈 import para o timer
 import cProfile  # 👈 Import para profiling
-from email_sender import enviar_relatorio_email  # 👈 Novo import
 
 # 👇 Inicia o timer global
 start_time = time.time()
@@ -34,7 +33,7 @@ def main():
                 print("Encontrado dados de hoje, deletando...")
                     # Query para deletar registros com a data de hoje     
                 connection.execute(
-                        text("DELETE FROM financa.dbo.orcado WHERE data_atualizacao = :hoje"),
+                        text("DELETE FROM financa.dbo.Provisao WHERE data_atualizacao = :hoje"),
                         {"hoje": hoje}
                 )
             # 🔍 Carrega os resultados diretamente em um DataFrame
@@ -108,8 +107,6 @@ def main():
         #3. ✅ Salva o arquivo (só se pelo menos uma aba foi adicionada)
         if relatorio.sheets_added:
             caminho_arquivo = relatorio.save()
-            if caminho_arquivo:  # 👈 Verifica se o caminho foi retornado
-                enviar_relatorio_email(dataframes_email, caminho_arquivo)   
         else:
             print("Nenhuma planilha foi adicionada ao relatório")
     # Encerrar conexão
